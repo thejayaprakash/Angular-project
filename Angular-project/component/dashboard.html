@@ -1,0 +1,50 @@
+
+<html >
+<head>
+    <!-- Include necessary scripts and stylesheets -->
+    
+<link rel="stylesheet" type="text/css" href="css/dashboard.css" >
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+</style>
+</head>
+<body >
+    <header>
+        <header>
+            <div class="navbar">
+                <div class="logo">
+                    <!-- Your website logo or branding can go here -->
+                </div>
+                <div class="search">
+                    <i class="fas fa-search">
+                    <input type="text" placeholder="Search products " ng-model="searchItem">
+                 </i>
+                </div>
+                <div class="cart">
+                    <button ng-click="goTocart()"> <!-- Add the link to your shopping cart page -->
+                        <i class="fas fa-shopping-cart"></i> Cart
+                    </a>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+    </header>
+    <main>
+
+        <div class="product-list">
+        
+            <div class="product" ng-repeat="product in products |filter:{category :searchItem}">
+                <div class="product-container">
+                <img ng-src="{{product.imageUrl}}" style="height: 150px;width: 200px;" alt="{{product.name}}">
+               
+                <h3 class="product-description">{{product.description}}</h3>
+                <p class="product-price">{{product.price | currency}}</p>
+                <button  class="add-to-cart-button " ng-click="addToCart(product)">Add to Cart</button>
+            </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

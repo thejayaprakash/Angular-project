@@ -1,0 +1,10 @@
+<div ng-controller="CartController">
+    <h1>Cart Summary</h1>
+    <ul>
+        <li ng-repeat="item in cartItems">
+            {{ item.name }} - Price: {{ item.price | currency }} - Quantity: {{ item.quantity }}
+            <button ng-click="removeFromCart(item)">Remove</button>
+        </li>
+    </ul>
+    <p>Total Cost: {{ getTotalCost() | currency }}</p>
+</div>
