@@ -1,1 +1,1 @@
-# Angular-project
+# Angularjs-project
