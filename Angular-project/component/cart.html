@@ -1,10 +1,61 @@
-<div ng-controller="CartController">
-    <h1>Cart Summary</h1>
-    <ul>
-        <li ng-repeat="item in cartItems">
-            {{ item.name }} - Price: {{ item.price | currency }} - Quantity: {{ item.quantity }}
-            <button ng-click="removeFromCart(item)">Remove</button>
-        </li>
-    </ul>
-    <p>Total Cost: {{ getTotalCost() | currency }}</p>
+<html>
+    <link rel="stylesheet" href="css/cart.css" type="text/css">
+    <body>
+<div class="col-4">
+    <div class = "panel panel-primary">
+        <div class = "panel-heading">
+            <h5>MY CART</h5>
+        </div>
+        <div class = "panel-body table-responsive">
+         
+                <table class="tbl-cart" cellpadding="10" cellspacing="1">
+
+                    <thead>
+                    <th style="text-align:left;">PRODUCT IMAGE</th>
+                    <th style="text-align:left;">NAME</th>
+                    <th style="text-align:right;" width="15%">Quantity</th>          
+                    <th style="text-align:right;" width="10%">Price</th>
+                    <th style="text-align:center;" width="5%">Remove</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat = "cart in carts" >
+                            <td><img ng-src="{{cart.p_image}}" style="height: 100px;width: 120px" ></td>
+                            <td>{{cart.p_name}}</td>
+                            <td style="text-align: right" >{{getQuantity()}}</td>
+                            <td style="text-align: right;">{{cart.p_price}}</td>
+                            <td><button type = "button" ng-click = "remove_cart(cart)" class = "btn btn-danger" style="text-align: center ;background-color: green;width:50px;"> X</button></td>
+                        </tr>
+                        <tr>
+                            <td >Total</td>
+                            <td>{{getTotalPrice()}}</td>
+                        </tr>
+                    </tbody>
+            </table>
+            <!-- <table class = "table">
+                <thead>
+                        <th></th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat = "cart in carts" >
+                        <td><img ng-src="{{cart.p_image}}" style="height: 100px;width: 120px" ></td>
+                        <td>{{cart.p_name}}</td>
+                        <td>{{cart.p_price}}</td>
+                        <td><button type = "button" ng-click = "remove_cart(cart)" class = "btn btn-danger"> X</button></td>
+                    </tr>
+                    <tr>
+                        <td >Total</td>
+                        <td>{{getTotalPrice()}}</td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
 </div>
+</div>
+</div>
+</body>
+</html>
