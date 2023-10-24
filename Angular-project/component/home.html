@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Delivery Website Home Page</title>
+    <link rel="stylesheet" type="text/css" href="css/home.css" >
     <style>
         /* Add your CSS styles here */
         .container {
@@ -44,27 +45,19 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Welcome to Our Delivery Website</h1>
+    <div class="navbar">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <button class="login-button" ng-click="loginTo()">Login</button>
+          <button class="signup-button" ng-click="signTo()">Sign Up</button>
+          <button class="signup-button" ng-click="dashboardTo()">dashboard</button>
         </div>
-
-        <div class="buttons">
-            <button  ng-click="loginTo()" >Login</button>
-              
-            <button  ng-click="signTo()" >Sign Up</button>
-            <button  ng-click="dashboardTo()" >dashboard </button>
-        </div>
-
-        <div class="news">
-            <h2>Latest News</h2>
-            <p>We are excited to announce faster and more efficient delivery services. Stay tuned for updates!</p>
-        </div>
-
-        <div class="info">
-            <h2>Why Choose Us?</h2>
-            <p>We are committed to providing you with reliable and secure delivery services. Our team is dedicated to ensuring your parcels reach their destination on time and in perfect condition.</p>
-        </div>
-    </div>
+      </div>
+    
 </body>
 </html>
