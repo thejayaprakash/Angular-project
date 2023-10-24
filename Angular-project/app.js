@@ -18,11 +18,13 @@ app.config(function ($routeProvider) {
         })
        .when('/dashboard',{
         templateUrl:"component/dashboard.html",
-        controller:'dashboardController'
+        controller:'dashboardController',
+        service:'cartservice'
        })
-       .when('/cart.html',{
+       .when('/cart',{
         templateUrl:"component/cart.html",
-        controller:"cartController"
+        controller:"cartController",
+        service:'Cartservice'
        })
         // Add other routes as needed
         
@@ -32,6 +34,9 @@ app.config(function ($routeProvider) {
                 });
         
 });
+// app.service('cartService',function($scope){
+//     this.carts=[];
+// })
 
 app.controller('HomeController',function($scope,$location){
     $scope.loginTo=function(){
@@ -46,36 +51,47 @@ app.controller('HomeController',function($scope,$location){
 });
 
 app.controller("signupController",function($scope,$http,$location){
-    $scope.Register=function(){
-            var username=$scope.username;
-            var email=$scope.email;
-            var password=$scope.password;
-            var mobileNo=$scope.mobile;
-$http({
-    url: 'http://localhost/angular-project/mysql/connection.php',
-    method: 'POST', 
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: 'username='+username+'&email='+email+'&password='+password+'&mobileNo='+mobileNo
-}).then(function(response){
-    if(response.data.status=='inserted'){
-        user.saveData(response.data);
-        alert("Registration Successful");
-        $location.path('/login');
-    }
-    else{
-        alert(" inserted unsucessful ");
-    }
+  console.log('inside a singup')
 
-})
-    }
+    $scope.Register=function(info) {
+        console.log('inside a fun')
+        $http.post('http://127.0.0.1:5500//Angular-project/Angular-project/api/'+'insert',info).then(successCallback, errorCallback);
+
+        function successCallback(response){
+            console.log(info)
+            $window.location.href='login.html';
+        }
+        function errorCallback(error){
+            console.log(error)
+        }
+    };
+
 });
-
-app.controller('dashboardController',function($scope,$location){
+app.service('Cartservice',function(){
+    this.cart=[];
+    this.addToCart = function (product) {
+        var existingItem = this.cart.find(item => item.p_name === product.description);
+        
+        if (existingItem) {
+            // If the item is already in the cart, increment its quantity and update the total price
+            existingItem.quantity += 1;
+            existingItem.totalPrice = existingItem.p_price * existingItem.quantity;
+        } else {
+            // If the item is not in the cart, add it with a quantity of 1
+            product.quantity = 1;
+            product.totalPrice = product.p_price;
+            this.cart.push(product);
+            
+            console.log(this.cart)
+        }
+    };
+});
+app.controller('dashboardController',function($scope,$location,Cartservice){
    console.log('dashborad');
+//    $scope.cart=Cartservice.cart;
     $scope.products=[
       { 
+       
         description:'ADIDAS',
         price: 499.00,
         imageUrl:'images/shoe-1.png',
@@ -84,18 +100,21 @@ app.controller('dashboardController',function($scope,$location){
 
     },
     { 
+      
         description:'PUMA',
         price: 899.00,
         imageUrl:'images/shoe-2.jpeg',
         category: 'shoes'
     },
     { 
+     
         description:'CRAETIVE',
         price: 399.00,
         imageUrl:'images/t-short-1.png',
         category:'T-short'
     },
     { 
+     
         description:'ERA-CAP',
         price: 699.00,
         imageUrl:'images/cap-1.jpeg',
@@ -104,75 +123,44 @@ app.controller('dashboardController',function($scope,$location){
    
     
     ];
+
    $scope.addToCart=function(product){
-    cartService.addItem(product);
+
+    console.log(product);
+
+    Cartservice.addToCart(product);
+
+    
 
    }
 
-   $scope.goTocart=function(){
-$location.path('/cart.html');
+ $scope.goTocart=function(){
+
+$location.path('/cart');
+
    }
 });
 
+app.controller('cartController',function($scope,Cartservice){
+console.log(Cartservice.cart[0])
+$scope.carts=Cartservice.cart;
+$scope.getTotalPrice = function () {
+    let totalPrice = 0;
+    for (let i = 0; i < $scope.carts.length; i++) {
+        totalPrice += $scope.carts[i].p_price;
+    }
+    return totalPrice;
+};
+// $scope.getQuantity=function(){
+//     let quantity = 0;
+//     for (let i = 0; i < $scope.carts.length; i++) {
+//         if($scope.carts[i].p_id>0)
+//              totalPrice ++;
+//     }
+//     return totalPrice;
 
-app.service('CartService', function() {
-    var cartItems = [];
-
-    this.addToCart = function(product) {
-        // Check if the product is already in the cart
-        var existingItem = cartItems.find(function(item) {
-            return item.name === product.name;
-        });
-
-        if (existingItem) {
-            // If the item is already in the cart, increase its quantity
-            existingItem.quantity++;
-        } else {
-            // If the item is not in the cart, add it
-            var newItem = angular.copy(product);
-            newItem.quantity = 1;
-            cartItems.push(newItem);
-        }
-    };
-
-    this.getCartItems = function() {
-        return cartItems;
-    };
-
-    this.removeFromCart = function(product) {
-        var index = cartItems.findIndex(function(item) {
-            return item.name === product.name;
-        });
-
-        if (index !== -1) {
-            if (cartItems[index].quantity > 1) {
-                // Decrease the quantity if there are more than one
-                cartItems[index].quantity--;
-            } else {
-                // Remove the item from the cart if there's only one
-                cartItems.splice(index, 1);
-            }
-        }
-    };
-
-    this.getTotalCost = function() {
-        var total = 0;
-        for (var i = 0; i < cartItems.length; i++) {
-            total += cartItems[i].price * cartItems[i].quantity;
-        }
-        return total;
-    };
 });
-;
 
-app.controller('CartController', function($scope, CartService) {
-    $scope.cartItems = CartService.getCartItems();
 
-    $scope.removeFromCart = function(product) {
-        CartService.removeFromCart(product);
-    };
 
-    $scope.getTotalCost = function() {
-        return CartService.getTotalCost();
-    };
-});
+
